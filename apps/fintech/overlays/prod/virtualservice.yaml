@@ -1,0 +1,16 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: fintech
+spec:
+  hosts:
+    - fintech.prod.local
+  gateways:
+    - fintech-gw
+  http:
+    - timeout: 10s
+      route:
+        - destination:
+            host: api-gateway
+            port:
+              number: 80

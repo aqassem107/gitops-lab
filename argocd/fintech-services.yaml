@@ -1,0 +1,68 @@
+# 4 services x 3 بيئات = 12 Application (matrix generator)
+apiVersion: argoproj.io/v1alpha1
+kind: ApplicationSet
+metadata:
+  name: fintech-services
+  namespace: argocd
+spec:
+  goTemplate: true
+  goTemplateOptions: ["missingkey=error"]
+  generators:
+    - matrix:
+        generators:
+          - list:
+              elements:
+                - svc: api-gateway
+                - svc: accounts
+                - svc: transactions
+                - svc: notifications
+          - list:
+              elements:
+                - env: dev
+                  server: https://192.168.200.11:6443
+                  auto: "true"
+                - env: staging
+                  server: https://kubernetes.default.svc
+                  auto: "true"
+                - env: prod
+                  server: https://192.168.200.31:6443
+                  auto: "false"
+  template:
+    metadata:
+      name: 'fintech-{{.svc}}-{{.env}}'
+      labels:
+        app.kubernetes.io/part-of: fintech
+        env: '{{.env}}'
+    spec:
+      project: default
+      sources:
+        - repoURL: https://github.com/aqassem107/gitops-lab.git
+          targetRevision: main
+          path: charts/microservice
+          helm:
+            releaseName: '{{.svc}}'
+            valueFiles:
+              - $values/apps/fintech/common.yaml
+              - $values/apps/fintech/envs/{{.env}}.yaml
+              - $values/apps/fintech/services/{{.svc}}.yaml
+        - repoURL: https://github.com/aqassem107/gitops-lab.git
+          targetRevision: main
+          ref: values
+      destination:
+        server: '{{.server}}'
+        namespace: fintech
+  templatePatch: |
+    spec:
+      syncPolicy:
+        syncOptions:
+          - CreateNamespace=true
+        {{- if eq .env "prod" }}
+        managedNamespaceMetadata:
+          labels:
+            istio-injection: enabled
+        {{- end }}
+        {{- if eq .auto "true" }}
+        automated:
+          prune: true
+          selfHeal: true
+        {{- end }}

@@ -18,6 +18,9 @@ spec:
         app: {{ .Release.Name }}
         version: {{ .Values.image.tag | quote }}
     spec:
+      {{- if .Values.serviceAccount.create }}
+      serviceAccountName: {{ .Release.Name }}
+      {{- end }}
       containers:
         - name: app
           image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"

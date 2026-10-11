@@ -13,6 +13,10 @@ service:
 
 env: []
 
+# يعمل ServiceAccount باسم الـ release (محتاجه Istio AuthorizationPolicy)
+serviceAccount:
+  create: false
+
 probes:
   liveness: /healthz
   readiness: /readyz

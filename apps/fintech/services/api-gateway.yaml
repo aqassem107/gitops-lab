@@ -1,0 +1,16 @@
+image:
+  repository: docker.io/ahmedqasem/fintech-api-gateway
+  tag: "0.1.0"
+
+env:
+  - name: ACCOUNTS_URL
+    value: http://accounts
+  - name: TRANSACTIONS_URL
+    value: http://transactions
+  # اختياري: لو عملت Secret باسم gateway-api-key (key: key) الـ gateway هيطلب X-API-Key
+  - name: API_KEY
+    valueFrom:
+      secretKeyRef:
+        name: gateway-api-key
+        key: key
+        optional: true
