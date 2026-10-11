@@ -1,0 +1,32 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/stefanprodan/podinfo
+  tag: "6.7.1"
+  pullPolicy: IfNotPresent
+
+containerPort: 9898
+
+service:
+  type: ClusterIP
+  port: 80
+
+env: []
+
+probes:
+  liveness: /healthz
+  readiness: /readyz
+
+resources:
+  requests:
+    cpu: 20m
+    memory: 32Mi
+  limits:
+    memory: 128Mi
+
+# يحتاج metrics-server (مش متركب لسه)
+hpa:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70

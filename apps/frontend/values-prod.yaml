@@ -1,0 +1,17 @@
+replicaCount: 2
+
+service:
+  type: ClusterIP
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 64Mi
+  limits:
+    memory: 192Mi
+
+# فعّلها بعد تركيب metrics-server
+hpa:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 3
