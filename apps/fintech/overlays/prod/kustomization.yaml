@@ -4,5 +4,6 @@ resources:
   - gateway.yaml
   - virtualservice.yaml
   - destinationrules.yaml
+  - transactions-canary.yaml
   - peerauthentication.yaml
   - authorizationpolicies.yaml

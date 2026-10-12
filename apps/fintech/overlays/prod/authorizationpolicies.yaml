@@ -51,7 +51,8 @@ metadata:
 spec:
   selector:
     matchLabels:
-      app.kubernetes.io/name: transactions
+      # label app (مش app.kubernetes.io/name) عشان تغطي v1 وv2 مع بعض
+      app: transactions
   action: ALLOW
   rules:
     - from:

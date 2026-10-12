@@ -7,15 +7,22 @@ image:
 
 containerPort: 9898
 
+# اسم الـ app للـ label (الـ Service بتختار بيه). فاضي = اسم الـ release.
+# بنستخدمه في الـ canary: release اسمه transactions-v2 بس appName=transactions.
+appName: ""
+
 service:
+  enabled: true      # false في release الـ canary (الـ Service بتاعت v1 هي اللي بتخدم النسختين)
   type: ClusterIP
   port: 80
 
 env: []
 
-# يعمل ServiceAccount باسم الـ release (محتاجه Istio AuthorizationPolicy)
+# create: بيعمل ServiceAccount باسم الـ release (محتاجه Istio AuthorizationPolicy)
+# name: يستخدم SA موجود (للـ canary: نفس SA بتاع v1)
 serviceAccount:
   create: false
+  name: ""
 
 probes:
   liveness: /healthz

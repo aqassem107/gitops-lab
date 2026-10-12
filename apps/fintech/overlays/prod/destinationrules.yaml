@@ -34,6 +34,14 @@ spec:
       consecutive5xxErrors: 5
       interval: 30s
       baseEjectionTime: 30s
+  # الـ subsets بتتحدد بـ label version اللي الـ chart بيحطه من image.tag
+  subsets:
+    - name: v1
+      labels:
+        version: "0.1.0"
+    - name: v2
+      labels:
+        version: "0.2.0"
 ---
 apiVersion: networking.istio.io/v1
 kind: DestinationRule

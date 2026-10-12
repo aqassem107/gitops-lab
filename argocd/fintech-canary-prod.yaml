@@ -1,0 +1,28 @@
+# Canary: transactions v0.2.0 على prod بس. sync يدوي.
+# اتطبّق مرة واحدة: kubectl --context staging apply -f argocd/fintech-canary-prod.yaml
+apiVersion: argoproj.io/v1alpha1
+kind: Application
+metadata:
+  name: fintech-transactions-v2-prod
+  namespace: argocd
+  labels:
+    app.kubernetes.io/part-of: fintech
+    env: prod
+spec:
+  project: default
+  sources:
+    - repoURL: https://github.com/aqassem107/gitops-lab.git
+      targetRevision: main
+      path: charts/microservice
+      helm:
+        releaseName: transactions-v2
+        valueFiles:
+          - $values/apps/fintech/common.yaml
+          - $values/apps/fintech/envs/prod.yaml
+          - $values/apps/fintech/services/transactions-v2.yaml
+    - repoURL: https://github.com/aqassem107/gitops-lab.git
+      targetRevision: main
+      ref: values
+  destination:
+    server: https://192.168.200.31:6443
+    namespace: fintech

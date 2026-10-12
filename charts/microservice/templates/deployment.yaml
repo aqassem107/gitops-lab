@@ -15,11 +15,17 @@ spec:
     metadata:
       labels:
         {{- include "microservice.selectorLabels" . | nindent 8 }}
-        app: {{ .Release.Name }}
+        app: {{ include "microservice.appName" . }}
         version: {{ .Values.image.tag | quote }}
     spec:
+      {{- $sa := "" }}
       {{- if .Values.serviceAccount.create }}
-      serviceAccountName: {{ .Release.Name }}
+      {{- $sa = .Release.Name }}
+      {{- else if .Values.serviceAccount.name }}
+      {{- $sa = .Values.serviceAccount.name }}
+      {{- end }}
+      {{- if $sa }}
+      serviceAccountName: {{ $sa }}
       {{- end }}
       containers:
         - name: app

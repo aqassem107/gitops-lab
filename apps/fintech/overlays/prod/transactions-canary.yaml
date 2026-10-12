@@ -1,0 +1,28 @@
+# توزيع الـ traffic الداخلي (mesh) على transactions: 90% v1 / 10% v2.
+# لازم تعمل Sync لـ fintech-transactions-v2-prod الأول وتتأكد إن pod الـ v2 بقى 2/2،
+# وإلا 10% من الطلبات هترجع 503 (مفيش upstream للـ subset v2).
+#
+# مراحل الـ rollout: غيّر الـ weights واعمل commit/push ثم Sync لـ fintech-platform-prod
+#   90/10 -> 50/50 -> 0/100 (وبعدها امسح v1)
+# Rollback فوري: 100/0
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: transactions
+spec:
+  hosts:
+    - transactions
+  http:
+    - route:
+        - destination:
+            host: transactions
+            subset: v1
+            port:
+              number: 80
+          weight: 90
+        - destination:
+            host: transactions
+            subset: v2
+            port:
+              number: 80
+          weight: 10

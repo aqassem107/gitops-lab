@@ -1,0 +1,28 @@
+# نسخة الـ canary من transactions (prod بس). بتتنشر كـ release تاني اسمه transactions-v2
+# بس بتنضم لنفس الـ Service (appName=transactions) ونفس الـ ServiceAccount.
+appName: transactions
+
+image:
+  repository: docker.io/ahmedqasem/fintech-transactions
+  tag: "0.2.0"
+
+replicaCount: 1
+
+service:
+  enabled: false
+
+serviceAccount:
+  create: false
+  name: transactions
+
+env:
+  - name: ACCOUNTS_URL
+    value: http://accounts
+  - name: NOTIFICATIONS_URL
+    value: http://notifications
+  - name: DATABASE_URL
+    valueFrom:
+      secretKeyRef:
+        name: db-transactions
+        key: url
+        optional: true
