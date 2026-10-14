@@ -4,7 +4,6 @@ image:
 
 # SQLite جوه الـ pod لحد ما الـ Postgres الخارجي يجهز: الداتا مش مشتركة بين replicas
 # وبتضيع مع كل restart. فمثبّتة على 1 (الـ file ده بيكسب على envs/*.yaml).
-replicaCount: 1
 
 env:
   # لما الـ DB تجهز: اعمل Secret باسم db-accounts (key: url) فيه
