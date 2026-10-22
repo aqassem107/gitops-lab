@@ -1,0 +1,5 @@
+replicaCount: 2
+
+# staging مفيهوش Ingress controller، فبنعرض الـ service مباشرة عن طريق MetalLB
+service:
+  type: LoadBalancer

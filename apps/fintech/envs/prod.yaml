@@ -1,0 +1,10 @@
+# prod: stateless services (api-gateway, notifications) بـ 2 replicas.
+# accounts و transactions بيثبتوا على 1 في services/*.yaml لحد ما الـ DB الخارجية تجهز.
+replicaCount: 2
+
+resources:
+  requests:
+    cpu: 50m
+    memory: 96Mi
+  limits:
+    memory: 256Mi

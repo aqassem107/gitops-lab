@@ -1,0 +1,19 @@
+image:
+  repository: docker.io/ahmedqasem/fintech-transactions
+  tag: "0.1.0"
+
+# نفس سبب accounts: SQLite لحد ما الـ DB الخارجية تجهز
+replicaCount: 1
+
+env:
+  - name: ACCOUNTS_URL
+    value: http://accounts
+  - name: NOTIFICATIONS_URL
+    value: http://notifications
+  # Secret باسم db-transactions (key: url) لما الـ DB تجهز
+  - name: DATABASE_URL
+    valueFrom:
+      secretKeyRef:
+        name: db-transactions
+        key: url
+        optional: true

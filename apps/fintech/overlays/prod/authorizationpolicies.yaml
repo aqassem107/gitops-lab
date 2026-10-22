@@ -1,0 +1,76 @@
+# Zero-trust: default deny في الـ namespace، وبعدين نفتح بس المسارات المسموحة.
+# الهوية = ServiceAccount (الـ chart بيعمل SA باسم كل service).
+#
+#   ingressgateway -> api-gateway -> accounts, transactions
+#   transactions   -> accounts, notifications
+#
+# اسم SA بتاع الـ ingress gateway في profile=default هو istio-ingressgateway-service-account
+# (تأكد: kubectl --context prod -n istio-system get deploy istio-ingressgateway \
+#   -o jsonpath='{.spec.template.spec.serviceAccountName}')
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: default-deny
+spec: {}
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-ingress-to-api-gateway
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: api-gateway
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/istio-system/sa/istio-ingressgateway-service-account
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-to-accounts
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: accounts
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/fintech/sa/api-gateway
+              - cluster.local/ns/fintech/sa/transactions
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-to-transactions
+spec:
+  selector:
+    matchLabels:
+      # label app (مش app.kubernetes.io/name) عشان تغطي v1 وv2 مع بعض
+      app: transactions
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/fintech/sa/api-gateway
+---
+apiVersion: security.istio.io/v1
+kind: AuthorizationPolicy
+metadata:
+  name: allow-to-notifications
+spec:
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: notifications
+  action: ALLOW
+  rules:
+    - from:
+        - source:
+            principals:
+              - cluster.local/ns/fintech/sa/transactions

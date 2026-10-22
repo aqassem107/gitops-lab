@@ -1,0 +1,50 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}
+  labels:
+    {{- include "microservice.labels" . | nindent 4 }}
+spec:
+  {{- if not .Values.hpa.enabled }}
+  replicas: {{ .Values.replicaCount }}
+  {{- end }}
+  selector:
+    matchLabels:
+      {{- include "microservice.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+      labels:
+        {{- include "microservice.selectorLabels" . | nindent 8 }}
+        app: {{ include "microservice.appName" . }}
+        version: {{ .Values.image.tag | quote }}
+    spec:
+      {{- $sa := "" }}
+      {{- if .Values.serviceAccount.create }}
+      {{- $sa = .Release.Name }}
+      {{- else if .Values.serviceAccount.name }}
+      {{- $sa = .Values.serviceAccount.name }}
+      {{- end }}
+      {{- if $sa }}
+      serviceAccountName: {{ $sa }}
+      {{- end }}
+      containers:
+        - name: app
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          ports:
+            - name: http
+              containerPort: {{ .Values.containerPort }}
+          {{- with .Values.env }}
+          env:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          livenessProbe:
+            httpGet:
+              path: {{ .Values.probes.liveness }}
+              port: http
+          readinessProbe:
+            httpGet:
+              path: {{ .Values.probes.readiness }}
+              port: http
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}

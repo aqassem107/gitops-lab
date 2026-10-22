@@ -1,0 +1,20 @@
+apiVersion: networking.istio.io/v1
+kind: VirtualService
+metadata:
+  name: frontend
+spec:
+  hosts:
+    - frontend.prod.local
+  gateways:
+    - frontend-gw
+  http:
+    - timeout: 5s
+      retries:
+        attempts: 2
+        perTryTimeout: 2s
+        retryOn: 5xx,connect-failure
+      route:
+        - destination:
+            host: frontend
+            port:
+              number: 80

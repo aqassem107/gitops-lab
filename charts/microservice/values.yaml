@@ -1,0 +1,43 @@
+replicaCount: 1
+
+image:
+  repository: ghcr.io/stefanprodan/podinfo
+  tag: "6.7.1"
+  pullPolicy: IfNotPresent
+
+containerPort: 9898
+
+# اسم الـ app للـ label (الـ Service بتختار بيه). فاضي = اسم الـ release.
+# بنستخدمه في الـ canary: release اسمه transactions-v2 بس appName=transactions.
+appName: ""
+
+service:
+  enabled: true      # false في release الـ canary (الـ Service بتاعت v1 هي اللي بتخدم النسختين)
+  type: ClusterIP
+  port: 80
+
+env: []
+
+# create: بيعمل ServiceAccount باسم الـ release (محتاجه Istio AuthorizationPolicy)
+# name: يستخدم SA موجود (للـ canary: نفس SA بتاع v1)
+serviceAccount:
+  create: false
+  name: ""
+
+probes:
+  liveness: /healthz
+  readiness: /readyz
+
+resources:
+  requests:
+    cpu: 20m
+    memory: 32Mi
+  limits:
+    memory: 128Mi
+
+# يحتاج metrics-server (مش متركب لسه)
+hpa:
+  enabled: false
+  minReplicas: 2
+  maxReplicas: 3
+  targetCPUUtilizationPercentage: 70

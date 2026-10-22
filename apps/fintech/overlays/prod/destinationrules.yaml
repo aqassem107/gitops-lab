@@ -1,0 +1,56 @@
+# Circuit breaking: بيطرد pod من الـ load balancing لو رجّع 5xx متكرر
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: api-gateway
+spec:
+  host: api-gateway
+  trafficPolicy:
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: accounts
+spec:
+  host: accounts
+  trafficPolicy:
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: transactions
+spec:
+  host: transactions
+  trafficPolicy:
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
+  # الـ subsets بتتحدد بـ label version اللي الـ chart بيحطه من image.tag
+  subsets:
+    - name: v1
+      labels:
+        version: "0.1.0"
+    - name: v2
+      labels:
+        version: "0.2.0"
+---
+apiVersion: networking.istio.io/v1
+kind: DestinationRule
+metadata:
+  name: notifications
+spec:
+  host: notifications
+  trafficPolicy:
+    outlierDetection:
+      consecutive5xxErrors: 5
+      interval: 30s
+      baseEjectionTime: 30s
