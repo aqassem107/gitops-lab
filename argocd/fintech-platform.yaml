@@ -1,4 +1,4 @@
-# الحاجات الخاصة بالبيئة (routing وسياسات الأمان) من Kustomize overlay، Application واحد لكل بيئة
+# Environment-specific resources (routing and security policies) come from the Kustomize overlay; one Application per environment
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

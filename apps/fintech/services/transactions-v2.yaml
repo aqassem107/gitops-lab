@@ -1,5 +1,5 @@
-# نسخة الـ canary من transactions (prod بس). بتتنشر كـ release تاني اسمه transactions-v2
-# بس بتنضم لنفس الـ Service (appName=transactions) ونفس الـ ServiceAccount.
+# Canary version of transactions (prod only). Deployed as a separate release named transactions-v2
+# but it joins the same Service (appName=transactions) and the same ServiceAccount.
 appName: transactions
 
 image:

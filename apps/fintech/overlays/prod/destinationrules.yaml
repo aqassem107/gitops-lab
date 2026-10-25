@@ -1,4 +1,4 @@
-# Circuit breaking: بيطرد pod من الـ load balancing لو رجّع 5xx متكرر
+# Circuit breaking: ejects a pod from load balancing after repeated 5xx responses
 apiVersion: networking.istio.io/v1
 kind: DestinationRule
 metadata:
@@ -34,7 +34,7 @@ spec:
       consecutive5xxErrors: 5
       interval: 30s
       baseEjectionTime: 30s
-  # الـ subsets بتتحدد بـ label version اللي الـ chart بيحطه من image.tag
+  # Subsets are selected by the version label the chart derives from image.tag
   subsets:
     - name: v1
       labels:

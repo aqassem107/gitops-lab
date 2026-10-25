@@ -24,7 +24,7 @@ spec:
     spec:
       project: default
       sources:
-        # 1) Helm chart العام + values الخاصة بالبيئة
+        # 1) Shared Helm chart + environment-specific values
         - repoURL: https://github.com/aqassem107/gitops-lab.git
           targetRevision: main
           path: charts/microservice
@@ -32,18 +32,18 @@ spec:
             releaseName: frontend
             valueFiles:
               - $values/apps/frontend/values-{{.env}}.yaml
-        # 2) مرجع لملفات الـ values
+        # 2) Reference to the values files
         - repoURL: https://github.com/aqassem107/gitops-lab.git
           targetRevision: main
           ref: values
-        # 3) Kustomize overlay الخاص بالبيئة (routing وغيره)
+        # 3) Environment-specific Kustomize overlay (routing etc.)
         - repoURL: https://github.com/aqassem107/gitops-lab.git
           targetRevision: main
           path: apps/frontend/overlays/{{.env}}
       destination:
         server: '{{.server}}'
         namespace: frontend
-  # prod: sync يدوي + label للـ Istio injection. dev/staging: sync تلقائي
+  # prod: manual sync + Istio injection label. dev/staging: automated sync
   templatePatch: |
     spec:
       syncPolicy:

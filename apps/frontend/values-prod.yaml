@@ -10,7 +10,7 @@ resources:
   limits:
     memory: 192Mi
 
-# فعّلها بعد تركيب metrics-server
+# Enable after installing metrics-server
 hpa:
   enabled: false
   minReplicas: 2

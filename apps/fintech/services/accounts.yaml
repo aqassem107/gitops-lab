@@ -2,12 +2,8 @@ image:
   repository: docker.io/ahmedqasem/fintech-accounts
   tag: "0.1.0"
 
-# SQLite جوه الـ pod لحد ما الـ Postgres الخارجي يجهز: الداتا مش مشتركة بين replicas
-# وبتضيع مع كل restart. فمثبّتة على 1 (الـ file ده بيكسب على envs/*.yaml).
-replicaCount: 1
-
 env:
-  # لما الـ DB تجهز: اعمل Secret باسم db-accounts (key: url) فيه
+  # Create a Secret named db-accounts (key: url) containing:
   # postgresql+psycopg://user:pass@host:5432/accounts
   - name: DATABASE_URL
     valueFrom:

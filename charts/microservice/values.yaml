@@ -7,19 +7,19 @@ image:
 
 containerPort: 9898
 
-# اسم الـ app للـ label (الـ Service بتختار بيه). فاضي = اسم الـ release.
-# بنستخدمه في الـ canary: release اسمه transactions-v2 بس appName=transactions.
+# App name used for the label (the Service selects on it). Empty = release name.
+# Used for the canary: a release named transactions-v2 with appName=transactions.
 appName: ""
 
 service:
-  enabled: true      # false في release الـ canary (الـ Service بتاعت v1 هي اللي بتخدم النسختين)
+  enabled: true      # false for the canary release (the v1 Service serves both versions)
   type: ClusterIP
   port: 80
 
 env: []
 
-# create: بيعمل ServiceAccount باسم الـ release (محتاجه Istio AuthorizationPolicy)
-# name: يستخدم SA موجود (للـ canary: نفس SA بتاع v1)
+# create: creates a ServiceAccount named after the release (needed by the Istio AuthorizationPolicy)
+# name: use an existing SA (for the canary: the same SA as v1)
 serviceAccount:
   create: false
   name: ""
@@ -35,7 +35,7 @@ resources:
   limits:
     memory: 128Mi
 
-# يحتاج metrics-server (مش متركب لسه)
+# Requires metrics-server (not installed yet)
 hpa:
   enabled: false
   minReplicas: 2

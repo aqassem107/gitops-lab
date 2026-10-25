@@ -1,4 +1,4 @@
-# staging مفيهوش Ingress controller: بنعرض الـ gateway مباشرة عن طريق MetalLB
+# staging has no Ingress controller: the gateway is exposed directly through MetalLB
 apiVersion: v1
 kind: Service
 metadata:

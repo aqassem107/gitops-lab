@@ -7,7 +7,7 @@ env:
     value: http://accounts
   - name: TRANSACTIONS_URL
     value: http://transactions
-  # اختياري: لو عملت Secret باسم gateway-api-key (key: key) الـ gateway هيطلب X-API-Key
+  # Optional: if you create a Secret named gateway-api-key (key: key), the gateway will require X-API-Key
   - name: API_KEY
     valueFrom:
       secretKeyRef:

@@ -1,5 +1,5 @@
 replicaCount: 2
 
-# staging مفيهوش Ingress controller، فبنعرض الـ service مباشرة عن طريق MetalLB
+# staging has no Ingress controller, so the service is exposed directly through MetalLB
 service:
   type: LoadBalancer

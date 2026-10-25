@@ -1,4 +1,4 @@
-# Values مشتركة لكل services الـ fintech في كل البيئات
+# Values shared by all fintech services in every environment
 containerPort: 8000
 
 probes:

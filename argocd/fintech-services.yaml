@@ -1,4 +1,4 @@
-# 4 services x 3 بيئات = 12 Application (matrix generator)
+# 4 services x 3 environments = 12 Applications (matrix generator)
 apiVersion: argoproj.io/v1alpha1
 kind: ApplicationSet
 metadata:

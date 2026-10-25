@@ -1,5 +1,5 @@
-# Canary: transactions v0.2.0 على prod بس. sync يدوي.
-# اتطبّق مرة واحدة: kubectl --context staging apply -f argocd/fintech-canary-prod.yaml
+# Canary: transactions v0.2.0 on prod only. Manual sync.
+# Applied once: kubectl --context staging apply -f argocd/fintech-canary-prod.yaml
 apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:

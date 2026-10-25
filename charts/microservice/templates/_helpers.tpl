@@ -1,6 +1,6 @@
-{{/* اسم الـ app اللي بيجمّع النسخ: الـ Service بتختار pods بـ label app=<appName>.
-     الافتراضي = اسم الـ release. في الـ canary نسخة v2 بتاخد appName=transactions
-     عشان نفس الـ Service توصّل للنسختين. */}}
+{{/* App name that groups the versions: the Service selects pods by label app=<appName>.
+          Defaults to the release name. In the canary, v2 uses appName=transactions
+          so the same Service reaches both versions. */}}
 {{- define "microservice.appName" -}}
 {{- default .Release.Name .Values.appName -}}
 {{- end }}

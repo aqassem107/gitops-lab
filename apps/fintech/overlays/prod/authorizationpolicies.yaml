@@ -1,11 +1,11 @@
-# Zero-trust: default deny في الـ namespace، وبعدين نفتح بس المسارات المسموحة.
-# الهوية = ServiceAccount (الـ chart بيعمل SA باسم كل service).
+# Zero-trust: default deny in the namespace, then open only the allowed paths.
+# Identity = ServiceAccount (the chart creates one SA per service).
 #
 #   ingressgateway -> api-gateway -> accounts, transactions
 #   transactions   -> accounts, notifications
 #
-# اسم SA بتاع الـ ingress gateway في profile=default هو istio-ingressgateway-service-account
-# (تأكد: kubectl --context prod -n istio-system get deploy istio-ingressgateway \
+# The ingress gateway SA under profile=default is istio-ingressgateway-service-account
+# (verify: kubectl --context prod -n istio-system get deploy istio-ingressgateway \
 #   -o jsonpath='{.spec.template.spec.serviceAccountName}')
 apiVersion: security.istio.io/v1
 kind: AuthorizationPolicy
@@ -51,7 +51,7 @@ metadata:
 spec:
   selector:
     matchLabels:
-      # label app (مش app.kubernetes.io/name) عشان تغطي v1 وv2 مع بعض
+      # label app (not app.kubernetes.io/name) so it covers v1 and v2 together
       app: transactions
   action: ALLOW
   rules:

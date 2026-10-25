@@ -1,5 +1,5 @@
-# prod: stateless services (api-gateway, notifications) بـ 2 replicas.
-# accounts و transactions بيثبتوا على 1 في services/*.yaml لحد ما الـ DB الخارجية تجهز.
+# prod: 2 replicas for every service (api-gateway, notifications, accounts, transactions).
+# accounts and transactions keep their state in the external HA PostgreSQL, so they can scale.
 replicaCount: 2
 
 resources:
