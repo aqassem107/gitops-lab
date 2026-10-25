@@ -1,6 +1,6 @@
 # prod: 2 replicas for every service (api-gateway, notifications, accounts, transactions).
 # accounts and transactions keep their state in the external HA PostgreSQL, so they can scale.
-replicaCount: 2
+replicaCount: 3
 
 resources:
   requests:
